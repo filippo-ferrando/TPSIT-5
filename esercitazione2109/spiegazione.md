@@ -29,3 +29,15 @@ MSG = f"{nick_mittente}:{nick_dest}:{messaggio}"
 Inserisco il mittente nel client e il server attraverso il db capisce dove voglio inviare i messaggi
 
 3. il server quando riceve "OK" entra in chat mod, bisogna inserire prima la lista di nick name "abilitati"
+
+### terza parte
+
+1. traslare tutto in tcp
+
+2. lista client con comando
+
+```python
+f"!list" #comando dal client
+f"list:{dict.keys()}
+```
+
