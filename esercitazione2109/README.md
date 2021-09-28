@@ -38,6 +38,6 @@ Inserisco il mittente nel client e il server attraverso il db capisce dove vogli
 
 ```python
 f"!list" #comando dal client
-f"list:{dict.keys()}
+f"list:{dict.keys()}"
 ```
 
