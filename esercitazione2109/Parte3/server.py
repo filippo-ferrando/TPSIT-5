@@ -1,10 +1,14 @@
 import socket as sck
 import threading as thr
 import time
+import logging
 
-CLIENT=('localhost', 5000)
+CLIENT=('localhost', 5005)
 lista_client = {}
 threads = []
+
+logging.basicConfig(level=logging.DEBUG)
+
 
 class Clients_class(thr.Thread):
     def __init__(self, connessione, addr):
@@ -28,10 +32,10 @@ class Clients_class(thr.Thread):
                 self.running = False
                 self.connessione.close()
                 lista_client.pop(messaggio[0])
-                print(f"{messaggio[0]} si è disconnesso.")
+                logging.info(f"{messaggio[0]} si è disconnesso.")
             
             elif '!LIST' in messaggio:
-                print(f"{messaggio[0]} ha usato il comando '!LIST'.")
+                logging.info(f"{messaggio[0]} ha usato il comando '!LIST'.")
                 clients = ""
                 for k in lista_client.keys():
                     clients += k + "\n"
@@ -40,7 +44,7 @@ class Clients_class(thr.Thread):
                 
             else:
                 if messaggio[0].lower() == "nickname":
-                    print(f"Nuova iscrizione: {messaggio[1]}")
+                    logging.info(f"Nuova iscrizione: {messaggio[1]}")
                     lista_client[messaggio[1]] = self.connessione
                     self.connessione.sendall("OK".encode())
 
@@ -50,11 +54,10 @@ class Clients_class(thr.Thread):
                         if messaggio[1] == k:
                             trovato = True
                             lista_client[messaggio[1]].sendall((messaggio[0] + ":" + messaggio[2]).encode())
-                            print(f"{messaggio[0]} manda a {messaggio[1]}: {messaggio[2]}")
+                            logging.info(f"{messaggio[0]} manda a {messaggio[1]}: {messaggio[2]}")
 
                     if trovato == False:
                         lista_client[messaggio[0]].sendall("Il destinatario da lei cercato non esiste.".encode())
-                            
 
 
 

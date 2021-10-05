@@ -1,11 +1,14 @@
 import socket
 import threading as thr
 import time
+import logging
+
+logging.basicConfig(filename='log.log', filemode='w',level=logging.DEBUG)
 
 registered = False
 nickname = ""
 
-SERVER=("192.168.0.100", 5000)
+SERVER=("localhost", 5005)
 
 class Receiver(thr.Thread):
     def __init__(self, s): 
@@ -24,7 +27,7 @@ class Receiver(thr.Thread):
             
             if data == "OK":
                 registered = True
-                print(f"\nConnection Accepted...Entering chat mode --> ")
+                logging.info(f"\nConnection Accepted...Entering chat mode --> ")
             
             else:
                 print(f"\n{data}")
