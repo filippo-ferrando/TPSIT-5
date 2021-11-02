@@ -1,0 +1,117 @@
+[10:08, 20/10/2021] Cristian Fenoglio: TPSIT new
+
+—————————————————LIVELLO——TRANSPORT——————————————————
+
+- Comunicazione tra processi
+
+- non presente sui router
+
+- AFFIDABILE (non è possibile perdere pacchetti)
+
+- Si usano i pacchetti (detti TPDU)—> incapsulato dentro al datagramma, a sua volta incapsulato dentro al frame compito: {"type":"excalidraw/clipboard","elements":[{"type":"text","version":285,"versionNonce":1430978266,"isDeleted":false,"id":"b4Hl_djIyd0D5_RV3JlJo","fillStyle":"hachure","strokeWidth":1,"strokeStyle":"solid","roughness":1,"opacity":100,"angle":0,"x":3224.4609375,"y":-460.2226562499998,"strokeColor":"#000000","backgroundColor":"transparent","width":1187,"height":156,"seed":1756939482,"groupIds":[],"strokeSharpness":"sharp","boundElementIds":[],"fontSize":136.03125,"fontFamily":2,"text":"Total Length 15byte","baseline":125,"textAlign":"left","verticalAlign":"top"}]}
+
+- UDP + facile
+- TCP è affidabile quindi connessioni
+- TCP—> connessioni—> 2 istruzioni bloccanti
+CONNESSIONI DEL TCP:
+Three-way handshake--> procedura sotto il connect e accept—> inventata Tomlinson nel 1975
+
+—————————————————————————————
+
+X è un numero intero che identifica il CR
+Y è un numero intero che identifica l’ACK
+CR—> connection request
+ACK—> è una conferma di ricezione
+DATA—> contiene anche la conferma del ricevimento di ACK
+
+
+Time	host1(client)						host2(server)
+  |————————————————————————accept()—> in grado di ricevere I CR
+  |————CR(seq=X)
+  |————————————————————————invia un messaggio di ACK(seq=y, ACK=X)
+  |————DATA(seq=X, ACK=y)   |
+  |
+
+
+Se un messaggio si perde?—> quando si manda un messaggio parte un countdown—> se scade il messaggio si da x perso,  si rimanda il messaggio
+
+Se si duplica un messaggio? Quando il vecchio CR arriva al server parte un nuovo ACK x il client che però, essendo già connesso, risponde con un REJECT
+
+
+DISCONNESSIONE:
+
+- Asimmetrica—> come chiudere il telefono in faccia, non si concorda la chiusura della connessione= PERDITA DATI
+
+- Simmetrica—>
+
+——————————————————————————————————————————————————
+
+LAB:
+
+ X cambiare il nome host—> SUDO
+
+Mettere il nome sulla scatola
+
+
+IP= 192.168.0.130
+[10:08, 20/10/2021] Cristian Fenoglio: TPSIT ripasso
+
+——————————————Pila TCP/IP———————————————————
+PILA:
+Applicazione
+	^
+Trasporto
+	^
+Internet
+	^
+Interfaccia di rete (host to network/ datalink)
+
+—> Una pila di protocolli
+
+
+TIPI DI MESSAGGI INVIATI:
+
+Messaggi o flussi
+	^
+Pacchetti
+	^
+datagrammi
+	^
+Frame(802.3, 802.11)
+
+
+HUB—> Un dispositivo che trasmette messaggi SENZA filtraggio(no software come lo switch)
+
+
+
+I VARI LIVELLI + le caratteristiche
+
+-applicazione:
+Ogni programma interagisce con uno dei protocolli dello strato si trasporto per inviare o trasmettere dati
+
+Flussi(streaming) o sequenze di singoli messaggi(come una chat)
+
+-trasporto
+Mette in comunicazione processi con processi (end to end)
+
+Utilizza il concetto di porta che identifica univocamente un processo(come un indirizzo)
+
+Unico livello dove si implementa l’affidabilità
+
+TCP(affidabile [garanzia di arrivo dei messaggi]) e UDP(non affidabile)
+
+Affidabile != Sicuro
+
+-livello internet
+
+IPV4 e IPV6
+
+Il router è il livello internet
+
+-livello dell’interfaccia di rete
+
+Fa comunicare le NIC
+
+NIC (schede di rete)
+
+Network Internet Card
