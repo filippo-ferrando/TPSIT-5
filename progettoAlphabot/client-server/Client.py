@@ -8,14 +8,14 @@ es:
 
 import socket as sck, string, time
 
-
-
+a = 'W100'
+print(a[1:])
 
 def main():
     s = sck.socket(sck.AF_INET, sck.SOCK_STREAM)  #creo un socket TCP / IPv4
-    s.connect(('192.168.0.122', 7001))
+    s.connect(('192.168.0.122', 7002))
 
-    print("COMANDI:\n-W --> avanti\n-S --> indietro\n-D --> destra\n-A --> sinistra\n-STOP --> stop\nI comandi devono essere seguiti da un numero che indica di quanto avanzare.\nEs:W100")
+    print("COMANDI:\n-W --> avanti\n-S --> indietro\n-D --> destra\n-A --> sinistra\n-STOP --> stop\nI comandi devono essere seguiti da un numero che indica di quanto avanzare e i due argomenti separati da un punto.\nEs:W.100")
 
     while True:
         command = input().upper().encode()
