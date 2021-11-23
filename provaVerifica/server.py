@@ -29,6 +29,24 @@ def operation_selecter(conn, client_num):
 
     return list
 
+def contatore(conn):
+    cur = conn.cursor()
+    cur.execute(f"SELECT max(client) FROM operations")
+
+    rows = cur.fetchall()
+
+    for row in rows:
+        return row[-1]
+
+
+def numeroMaxClient():
+    db = create_connection("./operations.db")
+    return contatore(db)
+    db.close()
+
+global nMaxClient
+nMaxClient = numeroMaxClient()
+
 class Client_Class(thr.Thread):
     def __init__(self, connection, addr, num_client):
         thr.Thread.__init__(self)
@@ -71,6 +89,8 @@ class Thread_remover(thr.Thread):
             
 
 def main():
+    global nMaxClient
+
     s = sck.socket(sck.AF_INET, sck.SOCK_STREAM)
     s.bind(CLIENT)
     s.listen()
@@ -91,7 +111,7 @@ def main():
         time.sleep(0.2)
 
         #print(client_counter)
-        if client_counter >= 2:
+        if client_counter >= nMaxClient:
             break
         
 

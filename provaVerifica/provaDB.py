@@ -21,13 +21,24 @@ def operation_selecter(conn, client_num):
 
     return list
 
+def contatore(conn):
+    cur = conn.cursor()
+    cur.execute(f"SELECT max(client) FROM operations")
+
+    rows = cur.fetchall()
+
+    for row in rows:
+       print(row[-1])
+
 def main():
     db = create_connection("./operations.db")
     op_list = operation_selecter(db, 1)
-
+    contatore(db)
     db.close()
 
-    print(op_list)
+    #print(op_list)
+
+    
 
     for element in op_list:
         print(eval(element))
