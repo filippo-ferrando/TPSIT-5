@@ -5,7 +5,7 @@ import socket as sck
 import sqlite3
 
 CLIENT=('localhost',12001)
-Operazione = {}
+lista_client = {}
 threads = []
 
 def create_connection(db_file):
@@ -29,11 +29,6 @@ def operation_selecter(conn, client_num):
 
     return list
 
-def numeroMaxClient():
-    db = create_connection("./operations.db")
-    return contatore(db)
-    db.close()
-
 def contatore(conn):
     cur = conn.cursor()
     cur.execute(f"SELECT max(client) FROM operations")
@@ -43,11 +38,10 @@ def contatore(conn):
     for row in rows:
         return row[-1]
 
-def dict_charger():
-    clientCount = numeroMaxClient()
+
+def numeroMaxClient():
     db = create_connection("./operations.db")
-    for n in range(1,clientCount):
-        Operazione[n] = operation_selecter(db, n)
+    return contatore(db)
     db.close()
 
 global nMaxClient
@@ -69,13 +63,18 @@ class Client_Class(thr.Thread):
     
     def run(self):
         while self.running:
-            for element in Operazione[self.num_client]:
+            db = create_connection("./operations.db")
+            operation_list = operation_selecter(db, self.num_client)
+            db.close()
+            for element in operation_list:
                 self.connection.sendall(element.encode())
                 answ = self.connection.recv(4096).decode()
                 print(f"client: {self.num_client} answered: {element} --> answer: {answ}")
             self.connection.sendall("exit".encode())
             self.stop_run()
             
+
+
 class Thread_remover(thr.Thread):
     def __init__(self):
         thr.Thread.__init__(self)

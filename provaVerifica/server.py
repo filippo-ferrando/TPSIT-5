@@ -1,11 +1,10 @@
 import threading as thr
-import os
 import time
 import socket as sck
 import sqlite3
 
-CLIENT=('localhost',12001)
-lista_client = {}
+CLIENT=('localhost',12002)
+Operazione = {}
 threads = []
 
 def create_connection(db_file):
@@ -14,34 +13,35 @@ def create_connection(db_file):
         conn = sqlite3.connect(db_file)
     except Error as e:
         print(e)
-
     return conn
 
 def operation_selecter(conn, client_num):
     list = []
     cur = conn.cursor()
     cur.execute(f"SELECT operation FROM operations Where client = {client_num}")
-
     rows = cur.fetchall()
-
     for row in rows:
         list.append((row[-1]))
 
     return list
 
-def contatore(conn):
-    cur = conn.cursor()
-    cur.execute(f"SELECT max(client) FROM operations")
-
-    rows = cur.fetchall()
-
-    for row in rows:
-        return row[-1]
-
-
 def numeroMaxClient():
     db = create_connection("./operations.db")
     return contatore(db)
+    db.close()
+
+def contatore(conn):
+    cur = conn.cursor()
+    cur.execute(f"SELECT max(client) FROM operations")
+    rows = cur.fetchall()
+    for row in rows:
+        return row[-1]
+
+def dict_charger():
+    clientCount = numeroMaxClient() + 1
+    db = create_connection("./operations.db")
+    for n in range(1,clientCount):
+        Operazione[n] = operation_selecter(db, n)
     db.close()
 
 global nMaxClient
@@ -63,18 +63,13 @@ class Client_Class(thr.Thread):
     
     def run(self):
         while self.running:
-            db = create_connection("./operations.db")
-            operation_list = operation_selecter(db, self.num_client)
-            db.close()
-            for element in operation_list:
+            for element in Operazione[self.num_client]:
                 self.connection.sendall(element.encode())
                 answ = self.connection.recv(4096).decode()
                 print(f"client: {self.num_client} answered: {element} --> answer: {answ}")
             self.connection.sendall("exit".encode())
             self.stop_run()
             
-
-
 class Thread_remover(thr.Thread):
     def __init__(self):
         thr.Thread.__init__(self)
@@ -121,4 +116,5 @@ def main():
     s.close()
 
 if __name__ == "__main__":
+    dict_charger()
     main()

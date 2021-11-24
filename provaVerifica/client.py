@@ -2,7 +2,7 @@ import socket
 import threading as thr
 import time
 
-server=("localhost", 12001)
+server=("localhost", 12002)
 
 class Receiver(thr.Thread):
     def __init__(self, s):
