@@ -1,7 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, request
 import sqlite3
+import string, random
 
 app = Flask(__name__)
+token = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(16))
 
 def validate(username, password):
     completion = False
@@ -33,9 +35,9 @@ def login():
             return redirect(url_for('secret'))
     return render_template('login.html', error=error)
 
-@app.route('/secret')
+@app.route(f'/{token}')
 def secret():
     return "This is a secret page!"
 
 if __name__== "__main__":
-    app.run()
+    app.run(debug=True)
