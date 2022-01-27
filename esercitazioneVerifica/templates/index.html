@@ -1,0 +1,16 @@
+<html>
+<head>
+<link rel="stylesheet" href='/static/style.css' />
+</head>
+<body>
+<h1>Port scanner</h1>
+<br>
+<form method="post">
+    <div><input type="text" id="IP-Port" placeholder="Inserire tipo: IP,Port1,Port2" name="indirizzo"></div>
+</form>
+<br>
+{% if msg %}
+        <p class="msg">{{ msg }}
+{% endif %}
+</body>
+</html>
