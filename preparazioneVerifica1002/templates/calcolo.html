@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Insert the Integrale</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="operation" name="operation" value="{{
+          request.form.integrale }}">
+        <input type="text" placeholder="estremo maggiore" name="estMax" value="{{
+          request.form.estMax }}">
+        <input type="text" placeholder="estremo minore" name="estMin" value="{{
+          request.form.estMin }}">
+        <input class="btn btn-default" type="submit" value="send">
+      </form>
+      {% if solution %}
+        <p class="solution"><strong>Solution:</strong> {{ solution }}
+      {% endif %}
+    </div>
+  </body>
+</html>
