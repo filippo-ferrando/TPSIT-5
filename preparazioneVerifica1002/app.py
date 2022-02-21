@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 import time, random, string
 from sympy.parsing.sympy_parser import parse_expr
 from sympy import *
+from datetime import datetime
+
 x = symbols('x')
 
 app = Flask(__name__)
@@ -17,6 +19,20 @@ def create_connection(db_file): #funzione per connettere il database allo script
         print(e)
 
     return conn
+
+def history(user, operation, estMin, estMax, solution):
+    conn = create_connection("db.db")
+    cur = conn.cursor()         #in pratica questo serve solamente a fare le query per fare il retrive della lista di comandi
+    cur.execute(f"INSERT INTO OPERATIONLOGGING (USERNAME, OPERATION, EstMin, EstMax, SOLUTION) VALUES ('{user}', '{operation}', '{estMin}', '{estMax}', '{solution}')") #esecuzione della query
+    cur.execute("commit")
+    conn.close()
+
+def logUser(user):
+    conn = create_connection("db.db")
+    cur = conn.cursor()
+    cur.execute(f"INSERT INTO USERLOG (USERNAME, DATE) VALUES ('{user}', '{datetime.today()}')")
+    cur.execute("commit")
+    conn.close()
 
 def validate(username, password):
     completion = False
@@ -48,6 +64,7 @@ def login():
         else:
             resp = make_response(redirect(url_for('secret')))
             resp.set_cookie('username', username)
+            logUser(username)
             return resp
     return render_template('login.html', error=error)
 
@@ -60,6 +77,7 @@ def secret():
             operation = parse_expr(request.form['operation'])
             print(operation)
             solution = integrate(operation, x)
+            history(username, operation, "", "", solution)
             print(solution)
         else:
             operation = parse_expr(request.form['operation'])
@@ -67,12 +85,19 @@ def secret():
             eMin = request.form['estMin']
             eMax = request.form['estMax']
             solution = integrate(operation, (x, eMin, eMax))
+            history(username, operation, eMin, eMax, solution)
             print(solution)
 
     elif request.method == 'GET':
-        return render_template('calcolo.html')
+        username = request.cookies.get('username')
+        resp = make_response(render_template('calcolo.html'))
+        resp.set_cookie('username', username)
+        return resp
 
-    return render_template("calcolo.html", solution=solution)
+
+    resp = make_response(render_template("calcolo.html", solution=solution))
+    resp.set_cookie('username', username)
+    return resp
 
 if __name__== "__main__":
     app.run(debug=True)

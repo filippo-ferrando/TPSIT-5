@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>Verifica Ferrando</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Webconfig Semaforo</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="Durata Verde" name="Dverde" value="{{
+          request.form.Dverde }}">
+        <input type="text" placeholder="Durata Giallo" name="Dgiallo" value="{{
+          request.form.Dgiallo }}">
+        <input type="text" placeholder="Durata Rosso" name="Drosso" value="{{
+          request.form.Drosso }}">
+        <input type="text" placeholder="Durata Luci Spente" name="Dls" value="{{
+          request.form.Dls }}">  
+
+        <input class="btn btn-deafult" type="submit" name="acceso" value="accendi" />
+    
+        <input class="btn btn-default" type="submit" value="send">
+      </form>
+      {% if solution %}
+        <p class="solution"><strong>Solution:</strong> {{ solution }}
+      {% endif %}
+    </div>
+  </body>
+</html>
